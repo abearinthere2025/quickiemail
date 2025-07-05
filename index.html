@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quickiemail - Temporary Email Service</title>
+    <meta name="description" content="Create temporary email addresses that last 15 minutes. Protect your privacy and avoid spam with our secure disposable email service.">
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6007363543206285"
+            crossorigin="anonymous"></script>
+    <meta name="google-adsense-account" content="ca-pub-6007363543206285">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Quickiemail - Temporary Email Service">
+    <meta property="og:description" content="Create temporary email addresses that last 15 minutes. Premium 24-hour access available.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://abearinthere.com">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .header { background: white; border-bottom: 1px solid #e2e8f0; padding: 16px 0; position: sticky; top: 0; z-index: 50; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
+        .logo { display: flex; align-items: center; gap: 12px; }
+        .logo-icon { width: 32px; height: 32px; background: #3b82f6; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
+        .logo-text { font-size: 1.25rem; font-weight: 600; color: #1f2937; }
+        .nav { display: flex; align-items: center; gap: 24px; }
+        .nav a { color: #6b7280; text-decoration: none; transition: color 0.2s; }
+        .nav a:hover { color: #3b82f6; }
+        
+        .main-content { max-width: 1200px; margin: 0 auto; padding: 32px 20px; }
+        .grid { display: grid; grid-template-columns: 1fr; gap: 32px; }
+        @media (min-width: 768px) { .grid { grid-template-columns: 2fr 1fr; } }
+        
+        .card { background: white; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); padding: 30px; margin: 20px 0; }
+        .email-generator { text-align: center; }
+        .btn { 
+            background: #3b82f6; 
+            color: white; 
+            border: none; 
+            padding: 14px 28px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 1.1rem; 
+            font-weight: 600; 
+            transition: all 0.2s;
+            margin: 5px;
+        }
+        .btn:hover { background: #2563eb; transform: translateY(-1px); }
+        .btn:disabled { background: #9ca3af; cursor: not-allowed; transform: none; }
+        .btn.success { background: #10b981; }
+        .btn.success:hover { background: #059669; }
+        .email-display { 
+            background: #f1f5f9; 
+            padding: 25px; 
+            border-radius: 8px; 
+            margin: 25px 0; 
+            border: 2px solid #e2e8f0;
+        }
+        .email-input { 
+            width: 100%; 
+            padding: 12px; 
+            border: 2px solid #e2e8f0; 
+            border-radius: 6px; 
+            font-family: monospace; 
+            font-size: 0.95rem; 
+            background: white;
+            margin-bottom: 15px;
+        }
+        .timer { 
+            display: inline-flex; 
+            align-items: center; 
+            background: #fef3c7; 
+            color: #92400e; 
+            padding: 8px 16px; 
+            border-radius: 6px; 
+            font-weight: 600; 
+            margin: 10px 0;
+        }
+        .timer.expired { background: #fecaca; color: #dc2626; }
+        .copy-btn { 
+            background: #059669; 
+            color: white; 
+            border: none; 
+            padding: 8px 16px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+        .copy-btn:hover { background: #047857; }
+        
+        .inbox { background: white; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); padding: 24px; }
+        .inbox h2 { font-size: 1.5rem; margin-bottom: 20px; color: #1f2937; }
+        .empty-inbox { text-align: center; padding: 40px 20px; color: #6b7280; }
+        .email-item { border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+        .email-header { display: flex; justify-content: between; align-items: start; margin-bottom: 8px; }
+        .email-from { font-weight: 600; color: #1f2937; }
+        .email-time { font-size: 0.875rem; color: #6b7280; }
+        .email-subject { font-weight: 500; margin-bottom: 8px; }
+        .email-preview { color: #6b7280; font-size: 0.875rem; }
+        
+        .sidebar { display: flex; flex-direction: column; gap: 24px; }
+        .features-card { background: white; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); padding: 24px; }
+        .features-list { display: flex; flex-direction: column; gap: 16px; }
+        .feature-item { display: flex; align-items: start; gap: 12px; }
+        .feature-icon { width: 20px; height: 20px; color: #3b82f6; margin-top: 2px; }
+        .feature-title { font-weight: 500; color: #1f2937; }
+        .feature-desc { font-size: 0.875rem; color: #6b7280; }
+        
+        .ad-card { background: white; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); padding: 20px; text-align: center; }
+        .ad-placeholder { background: linear-gradient(135deg, #dbeafe 0%, #fce7f3 100%); border-radius: 8px; padding: 40px 20px; border: 1px solid #e5e7eb; min-height: 250px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .ad-label { font-size: 0.75rem; color: #6b7280; margin-bottom: 12px; }
+        .ad-icon { font-size: 2rem; margin-bottom: 16px; }
+        .ad-title { font-weight: 600; color: #1f2937; margin-bottom: 8px; }
+        .ad-text { font-size: 0.875rem; color: #6b7280; margin-bottom: 16px; text-align: center; }
+        .ad-cta { background: #3b82f6; color: white; padding: 8px 16px; border-radius: 6px; font-size: 0.875rem; font-weight: 500; text-decoration: none; }
+        
+        .footer { background: white; border-top: 1px solid #e5e7eb; padding: 32px 0; }
+        .footer-content { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 32px; }
+        .footer-section h3 { font-weight: 600; margin-bottom: 16px; color: #1f2937; }
+        .footer-section p, .footer-section a { color: #6b7280; text-decoration: none; font-size: 0.875rem; line-height: 1.6; }
+        .footer-section a:hover { color: #3b82f6; }
+        .footer-links { display: flex; flex-direction: column; gap: 8px; }
+        .footer-bottom { border-top: 1px solid #e5e7eb; margin-top: 24px; padding-top: 16px; text-align: center; font-size: 0.875rem; color: #6b7280; }
+        
+        .hidden { display: none; }
+        .loading { opacity: 0.6; pointer-events: none; }
+        
+        /* Icons */
+        .icon { width: 16px; height: 16px; display: inline-block; vertical-align: middle; }
+        .icon-mail::before { content: "📧"; }
+        .icon-shield::before { content: "🛡️"; }
+        .icon-clock::before { content: "⏰"; }
+        .icon-share::before { content: "📤"; }
+        .icon-copy::before { content: "📋"; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">Q</div>
+                <div class="logo-text">Quickiemail</div>
+            </div>
+            <nav class="nav">
+                <a href="#features">Features</a>
+                <a href="#about">About</a>
+                <a href="/privacy.html">Privacy</a>
+                <a href="/terms.html">Terms</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- Email Generator -->
+        <div class="card email-generator">
+            <h1 style="font-size: 2.5rem; margin-bottom: 16px; color: #1f2937;">Generate Temporary Email</h1>
+            <p style="color: #6b7280; margin-bottom: 32px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Create a temporary email address that lasts 15 minutes. Perfect for signups, verification, and protecting your privacy.
+            </p>
+            
+            <div id="email-generator-content">
+                <div id="no-email-state">
+                    <button class="btn" onclick="generateEmail()">
+                        <span class="icon icon-mail"></span>
+                        Generate Temporary Email
+                    </button>
+                </div>
+                
+                <div id="email-active-state" class="hidden">
+                    <div class="email-display">
+                        <input type="text" id="generated-email" class="email-input" readonly>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div class="timer" id="timer">⏰ Loading...</div>
+                            <div>
+                                <button class="copy-btn" onclick="copyEmail()">
+                                    <span class="icon icon-copy"></span> Copy
+                                </button>
+                                <button class="btn success" onclick="extendEmail()">
+                                    +15 min
+                                </button>
+                                <button class="btn" onclick="startOver()" style="background: #6b7280;">
+                                    Start Over
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid">
+            <!-- Inbox -->
+            <div class="inbox">
+                <h2>📨 Inbox</h2>
+                <div id="inbox-content">
+                    <div class="empty-inbox">
+                        <div style="font-size: 3rem; margin-bottom: 16px;">📪</div>
+                        <h3 style="margin-bottom: 8px;">No emails yet</h3>
+                        <p>Generate an email address above to start receiving messages.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- AdSense Ad -->
+                <div class="ad-card">
+                    <div class="ad-label">Advertisement</div>
+                    <div class="ad-placeholder">
+                        <div class="ad-icon">🚀</div>
+                        <div class="ad-title">Boost Your Productivity</div>
+                        <div class="ad-text">Premium tools for developers and professionals</div>
+                        <a href="#" class="ad-cta">Learn More</a>
+                    </div>
+                    <!-- Real AdSense code will replace the placeholder -->
+                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-6007363543206285"
+                         data-ad-slot="1234567890"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+
+                <!-- Features -->
+                <div class="features-card">
+                    <h3 style="margin-bottom: 20px; font-size: 1.125rem;">Why Quickiemail?</h3>
+                    <div class="features-list">
+                        <div class="feature-item">
+                            <div class="feature-icon icon-shield">🛡️</div>
+                            <div>
+                                <div class="feature-title">Privacy Protected</div>
+                                <div class="feature-desc">Keep your real email safe from spam</div>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon icon-clock">⏰</div>
+                            <div>
+                                <div class="feature-title">Quick & Easy</div>
+                                <div class="feature-desc">Instant temporary email generation</div>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon icon-share">📤</div>
+                            <div>
+                                <div class="feature-title">Email Forwarding</div>
+                                <div class="feature-desc">Forward important emails to your real inbox</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <div class="logo-icon" style="width: 32px; height: 32px;">Q</div>
+                        <h3>Quickiemail</h3>
+                    </div>
+                    <p>Secure temporary email service protecting your privacy and keeping your inbox clean.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Service</h3>
+                    <div class="footer-links">
+                        <a href="#features">Features</a>
+                        <a href="#about">How it Works</a>
+                        <a href="#security">Security</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <div class="footer-links">
+                        <a href="/privacy.html">Privacy Policy</a>
+                        <a href="/terms.html">Terms of Service</a>
+                        <a href="#contact">Contact</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <div class="footer-links">
+                        <a href="#support">Support</a>
+                        <a href="#feedback">Feedback</a>
+                        <a href="#updates">Updates</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Quickiemail. All rights reserved. | Protecting your privacy, one email at a time.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let currentEmail = null;
+        let timerInterval = null;
+
+        // Generate email
+        function generateEmail() {
+            const btn = document.querySelector('#no-email-state button');
+            btn.disabled = true;
+            btn.textContent = 'Generating...';
+            
+            // Generate a random email
+            const timestamp = Date.now();
+            const randomId = Math.random().toString(36).substr(2, 9);
+            const email = `temp.${randomId}.${timestamp}@quickiemail.com`;
+            const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
+            
+            currentEmail = {
+                emailAddress: email,
+                expiresAt: expiresAt,
+                isPremium: false
+            };
+            
+            // Save to localStorage
+            localStorage.setItem('currentEmail', JSON.stringify(currentEmail));
+            
+            // Update UI
+            document.getElementById('generated-email').value = email;
+            document.getElementById('no-email-state').classList.add('hidden');
+            document.getElementById('email-active-state').classList.remove('hidden');
+            
+            startTimer();
+            loadInbox();
+        }
+
+        // Copy email to clipboard
+        function copyEmail() {
+            const emailInput = document.getElementById('generated-email');
+            emailInput.select();
+            emailInput.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = '✓ Copied!';
+            setTimeout(() => {
+                btn.textContent = originalText;
+            }, 2000);
+        }
+
+        // Extend email by 15 minutes
+        function extendEmail() {
+            if (!currentEmail) return;
+            
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = 'Extending...';
+            
+            // Extend by 15 minutes
+            currentEmail.expiresAt = new Date(new Date(currentEmail.expiresAt).getTime() + 15 * 60 * 1000);
+            localStorage.setItem('currentEmail', JSON.stringify(currentEmail));
+            
+            btn.disabled = false;
+            btn.textContent = '+15 min';
+            
+            startTimer();
+        }
+
+        // Start over with new email
+        function startOver() {
+            localStorage.removeItem('currentEmail');
+            currentEmail = null;
+            clearInterval(timerInterval);
+            
+            document.getElementById('email-active-state').classList.add('hidden');
+            document.getElementById('no-email-state').classList.remove('hidden');
+            document.querySelector('#no-email-state button').disabled = false;
+            document.querySelector('#no-email-state button').textContent = 'Generate Temporary Email';
+            
+            // Clear inbox
+            document.getElementById('inbox-content').innerHTML = `
+                <div class="empty-inbox">
+                    <div style="font-size: 3rem; margin-bottom: 16px;">📪</div>
+                    <h3 style="margin-bottom: 8px;">No emails yet</h3>
+                    <p>Generate an email address above to start receiving messages.</p>
+                </div>
+            `;
+        }
+
+        // Timer functionality
+        function startTimer() {
+            clearInterval(timerInterval);
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            if (!currentEmail) return;
+            
+            const now = new Date().getTime();
+            const expiry = new Date(currentEmail.expiresAt).getTime();
+            const timeLeft = expiry - now;
+            
+            const timerElement = document.getElementById('timer');
+            
+            if (timeLeft <= 0) {
+                timerElement.textContent = '⏰ Expired';
+                timerElement.className = 'timer expired';
+                clearInterval(timerInterval);
+                return;
+            }
+            
+            const minutes = Math.floor(timeLeft / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            
+            timerElement.textContent = `⏰ ${minutes}:${seconds.toString().padStart(2, '0')}`;
+            timerElement.className = 'timer';
+        }
+
+        // Load inbox (demo emails)
+        function loadInbox() {
+            if (!currentEmail) return;
+            
+            // Demo emails for display
+            const demoEmails = [
+                {
+                    from: 'welcome@example.com',
+                    subject: 'Welcome to our service!',
+                    preview: 'Thank you for signing up. Here are your next steps...',
+                    time: '2 minutes ago'
+                }
+            ];
+            
+            const inboxContent = document.getElementById('inbox-content');
+            
+            if (demoEmails.length === 0) {
+                inboxContent.innerHTML = `
+                    <div class="empty-inbox">
+                        <div style="font-size: 3rem; margin-bottom: 16px;">📪</div>
+                        <h3 style="margin-bottom: 8px;">No emails yet</h3>
+                        <p>Emails sent to ${currentEmail.emailAddress} will appear here.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            inboxContent.innerHTML = demoEmails.map(email => `
+                <div class="email-item">
+                    <div class="email-header">
+                        <div class="email-from">${email.from}</div>
+                        <div class="email-time">${email.time}</div>
+                    </div>
+                    <div class="email-subject">${email.subject}</div>
+                    <div class="email-preview">${email.preview}</div>
+                </div>
+            `).join('');
+        }
+
+        // Load saved email on page load
+        window.addEventListener('load', function() {
+            const saved = localStorage.getItem('currentEmail');
+            if (saved) {
+                try {
+                    currentEmail = JSON.parse(saved);
+                    const now = new Date().getTime();
+                    const expiry = new Date(currentEmail.expiresAt).getTime();
+                    
+                    if (expiry > now) {
+                        document.getElementById('generated-email').value = currentEmail.emailAddress;
+                        document.getElementById('no-email-state').classList.add('hidden');
+                        document.getElementById('email-active-state').classList.remove('hidden');
+                        startTimer();
+                        loadInbox();
+                    } else {
+                        localStorage.removeItem('currentEmail');
+                        currentEmail = null;
+                    }
+                } catch (e) {
+                    localStorage.removeItem('currentEmail');
+                    currentEmail = null;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
